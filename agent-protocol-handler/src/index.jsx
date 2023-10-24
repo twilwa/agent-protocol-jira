@@ -26,16 +26,47 @@ const addCommentForIssue = async (issueIdOrKey, commentBody) => {
   }
 };
 
-const deleteCommentForIssue = async (issueIdOrKey, commentId) => {
+const createIssue = async (issueData) => {
   const res = await api
-    .asUser()
-    .requestJira(route`/rest/api/3/issue/${issueIdOrKey}/comment/${commentId}`, {
-      method: 'DELETE',
+    .asApp()
+    .requestJira(route`/rest/api/3/issue`, {
+      method: 'POST',
+      body: JSON.stringify(issueData),
     });
 
   if (!res.ok) {
-    throw new Error(`Failed to delete comment with id ${commentId} for issue ${issueIdOrKey}`);
+    throw new Error(`Failed to create issue`);
   }
+};
+
+const updateIssue = async (issueIdOrKey, issueData) => {
+  const res = await api
+    .asApp()
+    .requestJira(route`/rest/api/3/issue/${issueIdOrKey}`, {
+      method: 'PUT',
+      body: JSON.stringify(issueData),
+    });
+
+  if (!res.ok) {
+    throw new Error(`Failed to update issue ${issueIdOrKey}`);
+  }
+};
+
+const searchIssues = async (jql) => {
+  const res = await api
+    .asApp()
+    .requestJira(route`/rest/api/3/search`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        jql: jql,
+      }),
+    });
+
+  const data = await res.json();
+  return data.issues;
 };
 
 const App = () => {
