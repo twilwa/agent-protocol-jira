@@ -1,0 +1,16 @@
+{
+  "dependencies": {
+    "@forge/api": "^2.19.4",
+    "agent-protocol": "^1.0.1",
+    "keytar": "^7.9.0"
+  },
+  "name": "agent-protocol-jira",
+  "module": "index.ts",
+  "type": "module",
+  "devDependencies": {
+    "bun-types": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  }
+}

@@ -1,0 +1,11 @@
+modules:
+  jira:issuePanel:
+    - key: agent-protocol-handler-hello-world-panel
+      function: main
+      title: agent-protocol-handler
+      icon: https://developer.atlassian.com/platform/forge/images/icons/issue-panel-icon.svg
+  function:
+    - key: main
+      handler: index.run
+app:
+  id: ari:cloud:ecosystem::app/4219bcc2-8dbd-4c7a-bdc4-65798e98d83e
