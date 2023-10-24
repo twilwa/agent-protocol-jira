@@ -12,6 +12,18 @@ const fetchCommentsForIssue = async (issueIdOrKey) => {
   return data.comments;
 };
 
+const deleteCommentForIssue = async (issueIdOrKey, commentId) => {
+  const res = await api
+    .asUser()
+    .requestJira(route`/rest/api/3/issue/${issueIdOrKey}/comment/${commentId}`, {
+      method: 'DELETE',
+    });
+
+  if (!res.ok) {
+    throw new Error(`Failed to delete comment with id ${commentId} for issue ${issueIdOrKey}`);
+  }
+};
+
 const App = () => {
   return (
     <Fragment>
