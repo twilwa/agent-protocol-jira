@@ -26,6 +26,18 @@ const addCommentForIssue = async (issueIdOrKey, commentBody) => {
   }
 };
 
+const deleteCommentForIssue = async (issueIdOrKey, commentId) => {
+  const res = await api
+    .asUser()
+    .requestJira(route`/rest/api/3/issue/${issueIdOrKey}/comment/${commentId}`, {
+      method: 'DELETE',
+    });
+
+  if (!res.ok) {
+    throw new Error(`Failed to delete comment ${commentId} from issue ${issueIdOrKey}`);
+  }
+};
+
 const createIssue = async (issueData) => {
   const res = await api
     .asApp()
