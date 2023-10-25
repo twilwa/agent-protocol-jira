@@ -52,6 +52,50 @@ const updateIssue = async (issueIdOrKey, issueData) => {
   }
 };
 
+const deleteIssue = async (issueIdOrKey) => {
+  const res = await api
+    .asApp()
+    .requestJira(route`/rest/api/3/issue/${issueIdOrKey}`, {
+      method: 'DELETE',
+    });
+
+  if (!res.ok) {
+    throw new Error(`Failed to delete issue ${issueIdOrKey}`);
+  }
+};
+
+const transitionIssue = async (issueIdOrKey, transitionId) => {
+  const res = await api
+    .asApp()
+    .requestJira(route`/rest/api/3/issue/${issueIdOrKey}/transitions`, {
+      method: 'POST',
+      body: JSON.stringify({
+        transition: {
+          id: transitionId,
+        },
+      }),
+    });
+
+  if (!res.ok) {
+    throw new Error(`Failed to transition issue ${issueIdOrKey}`);
+  }
+};
+
+const assignIssue = async (issueIdOrKey, accountId) => {
+  const res = await api
+    .asApp()
+    .requestJira(route`/rest/api/3/issue/${issueIdOrKey}/assignee`, {
+      method: 'PUT',
+      body: JSON.stringify({
+        accountId: accountId,
+      }),
+    });
+
+  if (!res.ok) {
+    throw new Error(`Failed to assign issue ${issueIdOrKey}`);
+  }
+};
+
 const searchIssues = async (jql) => {
   const res = await api
     .asApp()
