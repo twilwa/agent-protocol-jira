@@ -38,6 +38,44 @@ const deleteCommentForIssue = async (issueIdOrKey, commentId) => {
   }
 };
 
+const addWorklogForIssue = async (issueIdOrKey, worklogData) => {
+  const res = await api
+    .asUser()
+    .requestJira(route`/rest/api/3/issue/${issueIdOrKey}/worklog`, {
+      method: 'POST',
+      body: JSON.stringify(worklogData),
+    });
+
+  if (!res.ok) {
+    throw new Error(`Failed to add worklog to issue ${issueIdOrKey}`);
+  }
+};
+
+const updateWorklogForIssue = async (issueIdOrKey, worklogId, worklogData) => {
+  const res = await api
+    .asUser()
+    .requestJira(route`/rest/api/3/issue/${issueIdOrKey}/worklog/${worklogId}`, {
+      method: 'PUT',
+      body: JSON.stringify(worklogData),
+    });
+
+  if (!res.ok) {
+    throw new Error(`Failed to update worklog ${worklogId} for issue ${issueIdOrKey}`);
+  }
+};
+
+const deleteWorklogForIssue = async (issueIdOrKey, worklogId) => {
+  const res = await api
+    .asUser()
+    .requestJira(route`/rest/api/3/issue/${issueIdOrKey}/worklog/${worklogId}`, {
+      method: 'DELETE',
+    });
+
+  if (!res.ok) {
+    throw new Error(`Failed to delete worklog ${worklogId} from issue ${issueIdOrKey}`);
+  }
+};
+
 const createIssue = async (issueData) => {
   const res = await api
     .asApp()
