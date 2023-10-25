@@ -55,14 +55,11 @@ const updateIssue = async (issueIdOrKey, issueData) => {
 const searchIssues = async (jql) => {
   const res = await api
     .asApp()
-    .requestJira(route`/rest/api/3/search`, {
+    .requestJira(route`/rest/api/3/search?jql=${encodeURIComponent(jql)}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        jql: jql,
-      }),
     });
 
   const data = await res.json();
