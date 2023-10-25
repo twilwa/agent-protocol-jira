@@ -1,5 +1,18 @@
 import ForgeUI, { render, Fragment, Text, IssuePanel, Button, TextField, useProductContext } from "@forge/ui";
 import api, { route } from "@forge/api";
+import jwt from 'jsonwebtoken';
+
+const generateJwt = (sharedSecret, issuer, subject, audience) => {
+  const payload = {
+    iss: issuer,
+    sub: subject,
+    aud: audience,
+    iat: Math.floor(Date.now() / 1000),
+    exp: Math.floor(Date.now() / 1000) + (60 * 60),  // Expires in 1 hour
+  };
+
+  return jwt.sign(payload, sharedSecret, { algorithm: 'HS256' });
+};
 
 
 const fetchCommentsForIssue = async (issueIdOrKey) => {
@@ -76,18 +89,28 @@ const deleteWorklogForIssue = async (issueIdOrKey, worklogId) => {
   }
 };
 
-const addAttachmentForIssue = async (issueIdOrKey, attachmentData) => {
-  const res = await api
-    .asUser()
-    .requestJira(route`/rest/api/3/issue/${issueIdOrKey}/attachments`, {
-      method: 'POST',
-      body: JSON.stringify(attachmentData),
-    });
+const addAttachmentForIssue = async (issueIdOrKey, filePath, sharedSecret, issuer, subject, audience) => {
+  const formData = new FormData();
+  formData.append('file', fs.createReadStream(filePath));
+
+  const jwtToken = generateJwt(sharedSecret, issuer, subject, audience);
+
+  const { baseUrl } = await api.getEnvironment();
+
+  const res = await fetch(`${baseUrl}/rest/api/3/issue/${issueIdOrKey}/attachments`, {
+    method: 'POST',
+    body: formData,
+    headers: {
+      'X-Atlassian-Token': 'no-check',
+      'Authorization': `JWT ${jwtToken}`,
+      ...formData.getHeaders(),
+    },
+  });
 
   if (!res.ok) {
     throw new Error(`Failed to add attachment to issue ${issueIdOrKey}`);
   }
-};
+};;
 
 const deleteAttachment = async (attachmentId) => {
   const res = await api

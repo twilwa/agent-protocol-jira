@@ -2,6 +2,8 @@
   "dependencies": {
     "@forge/api": "^2.19.4",
     "agent-protocol": "^1.0.1",
+    "beth-stack": "^0.0.34",
+    "create-beth-app": "^0.0.6",
     "keytar": "^7.9.0"
   },
   "name": "agent-protocol-jira",
