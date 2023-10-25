@@ -76,6 +76,31 @@ const deleteWorklogForIssue = async (issueIdOrKey, worklogId) => {
   }
 };
 
+const addAttachmentForIssue = async (issueIdOrKey, attachmentData) => {
+  const res = await api
+    .asUser()
+    .requestJira(route`/rest/api/3/issue/${issueIdOrKey}/attachments`, {
+      method: 'POST',
+      body: JSON.stringify(attachmentData),
+    });
+
+  if (!res.ok) {
+    throw new Error(`Failed to add attachment to issue ${issueIdOrKey}`);
+  }
+};
+
+const deleteAttachment = async (attachmentId) => {
+  const res = await api
+    .asUser()
+    .requestJira(route`/rest/api/3/attachment/${attachmentId}`, {
+      method: 'DELETE',
+    });
+
+  if (!res.ok) {
+    throw new Error(`Failed to delete attachment ${attachmentId}`);
+  }
+};
+
 const createIssue = async (issueData) => {
   const res = await api
     .asApp()
