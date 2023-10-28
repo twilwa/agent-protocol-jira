@@ -9,3 +9,7 @@ modules:
       handler: index.run
 app:
   id: ari:cloud:ecosystem::app/4219bcc2-8dbd-4c7a-bdc4-65798e98d83e
+permissions:
+  scopes:
+    - read:jira-work
+    - write:jira-work
